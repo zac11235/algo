@@ -1,5 +1,4 @@
 package array;
-
 /**
  * 1) 数组的插入、删除、按照下标随机访问操作；
  * 2）数组中的数据是int类型的；
@@ -32,11 +31,11 @@ public class Array {
     public boolean insert(int index, int value){
         //数组中无元素 
 
-        //if (index == count && count == 0) {
-        //    data[index] = value;
-        //    ++count;
-        //    return true;
-        //}
+        if (index == count && count == 0) {
+            data[index] = value;
+            ++count;
+            return true;
+        }
 
         // 数组空间已满
         if (count == n) {
@@ -89,6 +88,7 @@ public class Array {
         array.insert(1, 5);
         array.insert(3, 9);
         array.insert(3, 10);
+        System.out.print("a");
         //array.insert(3, 11);
         array.printAll();
     }
