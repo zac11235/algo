@@ -40,16 +40,16 @@
     1. 使用说明主要描述如何使用你的程序以及使用时的注意事项； 
     2. 在小结中说明程序有待改进的思想、经验和体会。
 - ---
-##选题
+## 选题
 - 题目：1,2,4,**7**,8,9,10
 - 可选做：11 or 12 5分
 
-##时间计划
+## 时间计划
 - 7.6--7.19 两周 7个题目
 - 第一周 7.6-7.12 题目：1,2,4,8
 - 第二周 7.13-7.19 题目 7,9,10
 
-##资料
+## 资料
 1. 教材
 2. Github
 3. 微信电子图书
@@ -69,4 +69,222 @@
 采用循环单链表实现。
 
 #### 解题思路
-1. 两个参数，旅客数量n,整数m。按地址寻找，选中delete，人数为1时，跳出循环 ，返回剩余数据的编号。
+
+1. 设计概要：
+    1. 两个参数，旅客数量n,整数m。循环寻找，选中delete，人数为1时，跳出循环，返回剩余数据的编号。
+    2. 采用单链表的数据结构
+2. 详细设计
+    1. 采取链式存储结构，设计了结点类，链表类，还有实现类。链表类包含有添加，删除，查询，显示等功能模块。
+    主要的设计部分为添加与删除。
+    2. 设计思想
+    * 链表中使用指针进行循环删除，直至链表中仅剩1个非头结点，跳出循环。
+    3. 代码
+        1. 添加
+       ```java
+            
+       public class CircularLinkedList {
+       //    public void setHead(String s) {
+       //       head.value=s;
+       //    }
+           Node pre =null;
+           //java中循环单链表
+        class Node<T> {
+               public Node<T> getNext() {
+                   return next;
+               }
+       
+               //创建一个内部节点类
+               public Node<T> next = null;
+               public Object value = null;
+       
+               public Node() {
+       
+               }
+       
+               public Node(Object value) {
+                   this.value = value;
+               }
+           }
+       
+           public Node getHead() {
+               return head;
+           }
+       
+           public void setHead(Node head) {
+               this.head = head;
+           }
+       
+           private Node head ;//新建一个null的头结点
+       
+           public CircularLinkedList() {//初始化头结点信息
+               head = pre = new Node(null);
+               head.next = head;
+           }
+       
+           public void add(Object insertValue) {//在尾部添加节点
+               Node node = new Node(insertValue);
+               if (head.next == head) {
+                   head.next = node;
+                   node.next = head;
+               } else {
+                   Node temp = head;
+                   while (temp.next != head) {
+                       temp = temp.next;
+                   }
+                   temp.next = node;
+                   node.next = head;
+               }
+           }
+       
+           public void deleteNode(Object deleteValue) {//删除值为deleteValue的节点
+               Node temp = head;
+               while (temp.next != head) {
+                   if (temp.next.value.equals(deleteValue)) {
+                       temp.next = temp.next.next;
+                   } else {
+                       temp = temp.next;
+                   }
+               }
+           }
+       //删除当前节点，连接下一结点
+           public void deleteNode() {//删除值为deleteValue的节点、
+               if (pre.next!=head)
+                   pre.next=pre.next.next;
+       //            pre= pre.next.next;pre并非是是指向pre的指针，而是pre的地址
+               else pre.next.next= pre.next.next.next;
+       
+           }
+       
+       
+           public Object getIndexValue(int index) {//查找位置为index的节点值
+               if (index < 0 || index >= getSize()) {
+                   return null;
+               } else {
+                   Node node = new Node();
+                   int count = 0;
+                   Node temp = head;
+                   while (temp.next != head) {
+                       if (count == index) {
+                           node.value = temp.next.value;
+                           break;
+                       }
+                       temp = temp.next;
+       
+                   }
+                   return node.value;
+               }
+           }
+       
+           public int getValue(Object value) {//查找值为value的节点
+               int count = 0;
+               Node temp = head;
+               while (temp.next != head) {
+                   if (temp.next.value.equals(value)) {
+                       return count;
+                   }
+                   count++;
+                   temp = temp.next;
+               }
+               return -1;
+           }
+       
+           public int getSize() {//获取循环单链表的长度
+               Node temp = head;
+               int size = 0;
+               while (temp.next != head) {
+                   size++;
+                   temp = temp.next;
+               }
+               return size;
+           }
+       
+           public boolean isContain(Object value) {//查找是否包含值为value的节点
+               Node temp = head;
+               while (temp.next != head) {
+                   if (temp.next.value.equals(value)) {
+                       return true;
+                   }
+                   temp = temp.next;
+               }
+               return false;
+           }
+       
+           public void disPlay() {//打印所有节点数据
+               Node temp = head;
+                   while (temp.next != head) {
+                       System.out.print(temp.next.value + "\t");
+                       temp = temp.next;
+               }
+               System.out.println();
+           }
+       
+           public static void main(String[] args) {
+               CircularLinkedList c=new CircularLinkedList();
+               c.add(10);
+               c.add(21);
+               c.add(12);
+               c.add(13);
+               c.add(40);
+               c.disPlay();
+       //		System.out.println(c.getSize());
+       //		System.out.println(c.getIndexValue(-1));
+       //		System.out.println(c.getValue(40));
+       //		c.deleteNode(10);
+       //		c.disPlay();
+       //		c.deleteNode(40);
+       //		c.disPlay();
+       //		c.deleteNode(12);
+       //		c.disPlay();
+               System.out.println(c.isContain(21));
+           }
+       }
+
+```
+        1. 删除设计
+``` java
+    public void deleteNode(Object deleteValue) {//删除值为deleteValue的节点
+                 Node temp = head;
+                 while (temp.next != head) {
+                     if (temp.next.value.equals(deleteValue)) {
+                         temp.next = temp.next.next;
+                     } else {
+                         temp = temp.next;
+                     }
+                 }
+             }
+         //删除当前节点，连接下一结点
+             public void deleteNode() {//删除值为deleteValue的节点、
+                 if (pre.next!=head)
+                     pre.next=pre.next.next;
+         //            pre= pre.next.next;pre并非是是指向pre的指针，而是pre的地址
+                 else pre.next.next= pre.next.next.next;
+         
+             }
+```
+- --
+```
+    public static void joseph(int n, int m) {
+
+        CircularLinkedList c = new CircularLinkedList();
+        for (int i = 1; i <= n; i++)
+            c.add("person-" + i);
+        CircularLinkedList.Node per = c.getHead();
+        while (c.getSize() > 1) {
+            for (int i = 0; i < m-1; i++) {
+                per = per.next;
+                //循环到head，指针多下移一步。
+                if (per==c.getHead())
+                    per = per.next;
+            }
+            c.pre =per;
+            c.deleteNode();
+//            c.deleteNode(per.value);//删除当前值节点
+//            per=c.curr;
+            c.disPlay();
+        }
+    }
+```
+>-----
+[哈工大](http://www.hit.edu.cn/) ,一个你值得去好好学习的学校
+
+ 
