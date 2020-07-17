@@ -49,8 +49,8 @@ public class Linqueue implements Queue {
     }
 
     @Override
-    public boolean notEmpyt() {
-        return count!=0;
+    public boolean isEmpty() {
+        return count==0;
     }
 //输出的同时队列中的数据也被清空了
     public void out_d_All() throws Exception {
