@@ -70,38 +70,38 @@ public class Bag {
         }
     }
         public static void main(final String[] args) throws Exception {
-//            Random random = new Random();
-//            Scanner sc=new Scanner(System.in);
-//            System.out.println("请输入背包容量");
-//            int s=sc.nextInt();
-//            System.out.println("请输入物品数量");
-//            int n=sc.nextInt();
-//            System.out.println("请输入物品质量上限");
-//            int max=sc.nextInt();
-//            int min=1;
-//            int[] arr = new int[n];
-//            System.out.println("随机产生的"+n+"个物品的重量如下：");
-//            for (int i=0;i<n;i++) {
-//                arr[i]=random.nextInt(max)%(max-min+1) + min;
-//                System.out.print(" "+arr[i]);
-//            }
-//            bubbleSort2(arr,n);
-//            int[] temp=new int[n];
-//            int j=0;
-//            for (int i=n-1;i>-1;i-- ) {
-//                temp[j]=arr[i];
-//                j++;
-//            }
-//            arr=temp;
-//            System.out.println();
-//            System.out.println("排序后");
-//            for (int a:arr
-//                 ) {
-//                System.out.print(" "+a);
-//            }
-//            System.out.println();
+            Random random = new Random();
+            Scanner sc=new Scanner(System.in);
+            System.out.println("请输入背包容量");
+            int s=sc.nextInt();
+            System.out.println("请输入物品数量");
+            int n=sc.nextInt();
+            System.out.println("请输入物品质量上限");
+            int max=sc.nextInt();
+            int min=1;
+            int[] arr = new int[n];
+            System.out.println("随机产生的"+n+"个物品的重量如下：");
+            for (int i=0;i<n;i++) {
+                arr[i]=random.nextInt(max)%(max-min+1) + min;
+                System.out.print(" "+arr[i]);
+            }
+            bubbleSort2(arr,n);
+            int[] temp=new int[n];
+            int j=0;
+            for (int i=n-1;i>-1;i-- ) {
+                temp[j]=arr[i];
+                j++;
+            }
+            arr=temp;
+            System.out.println();
+            System.out.println("排序后");
+            for (int a:arr
+                 ) {
+                System.out.print(" "+a);
+            }
+            System.out.println();
 
-/*测试数据*/
+/*测试数据
             int s=15;
             int[] arr = new int[5];
             arr[0] = 4;
@@ -109,7 +109,7 @@ public class Bag {
             arr[2] = 10;
             arr[3] = 2;
             arr[4] = 3;
-
+*/
             Bag k = new Bag();
            boolean flag= k.knapsack(arr, 0, s, s);
             if (!flag)

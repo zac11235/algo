@@ -420,10 +420,187 @@
            Q.out_d_All();
        }
    }
-   
+    ```
+###题目4  递归算法设计
+>题目：背包问题 
+>> * 【问题描述】： 
+ 设有一个背包可以放入的物品重量最重为 s，现有 n 件物品，它们的重量分别为 w[0]、 w[1]、
+ w[2]、…、w[n-1]。问能否从这 n 件物品中选择若干件放入此背包中，使得放入的重量之和正好为 s。
+ 如果存在一种符合上述要求的选择，则称此背包问题有解（或称其解为真）；否则称此背包问题无解（或
+ 称其解为假）。试用递归方法设计求解背包问题的算法，如果有解，列出所有解。 【实现提示】： 
+ 背包问题的递归定义如下： 
+>>> True s=0 此背包问题一定有解 
+  False s<0 总重量不能为负数  
+  KNAP(s,n)= False s>0 且 n<1 物品件数不能为负数 
+  KNAP(s,n-1) s>0 且 n≥1 所选物品不包括 w[n-1]时 
+  KNAP(s-w[n-1], n-1) s>0 且 n≥1 所选物品包括 w[n-1]时
+> - ----
+####解题思路
+1. 概要
+    1.使用递归寻找背包问题的解。构建递归函数，再按照条件去实现目的递归
+    2.求的一解的基础上改进求不同首重的多解
+2. 详细
+    1. 构建递归函数，使其可以递归求解。使用链式队列存储可能解，并输出解，
+    同时求完一解后，去掉第一解的首重，再次求解，求得不同首重的多解
+    2. 可输入背包容量，物品数量，设定物品重量限制，生成随机的物品重量
+    3. 使用冒泡排序，排序物品重量，以完成有序递归
+    4.总结：一般的整数数组无法实现自增，最后使用链式队列完成不确定长度解的输入输出
+3. 代码：
+    * Bag
+    ```java
+    package P3;
+    
+    import P2.Linqueue;
+    import java.util.Random;
+    import java.util.Scanner;
+    
+    public class Bag {
+        Linqueue bag=new Linqueue();
+        int num=0;
+        public boolean knapsack(int[] arr, int start, int left, int sum) throws Exception {
+            int t=0;
+            if (arr.length == 0&&num==0) {
+                return false;
+            }
+            if (arr.length == 0&&num>0)
+                return true;
+    
+            // start from the next item in original array
+            if (start == arr.length) {
+                bag.dAll();
+                int[] tempArr = new int[arr.length - 1];
+                for (int i = 0; i < tempArr.length; i++) {
+                    tempArr[i] = arr[i + 1];
+                }
+                return knapsack(tempArr, 0, sum, sum);
+            }
+            else if (arr[start] > left) {
+                return knapsack(arr, start + 1, left, sum);
+            }
+            else if (arr[start] == left) {
+                    // print the answer out
+                bag.append(arr[start]);
+                //可求不同首重物品的多解
+                num++;
+                System.out.println("第"+num+"解如下");
+                bag.out_d_All();
+                System.out.println();
+    
+                return knapsack(arr, arr.length, sum, sum);
+            }
+            else {
+                bag.append(arr[start]);
+                return knapsack(arr, start + 1, left - arr[start], sum);
+            }
+        }
+    
+        public static void bubbleSort2(int[] a, int n) {
+            if (n <= 1) return;
+    
+            // 最后一次交换的位置
+            int lastExchange = 0;
+            // 无序数据的边界,每次只需要比较到这里即可退出
+            int sortBorder = n - 1;
+            for (int i = 0; i < n; i++) {
+                // 提前退出标志位
+                boolean flag = false;
+                for (int j = 0; j < sortBorder; j++) {
+                    if (a[j] > a[j + 1]) {
+                        int tmp = a[j];
+                        a[j] = a[j + 1];
+                        a[j + 1] = tmp;
+                        // 此次冒泡有数据交换
+                        flag = true;
+                        // 更新最后一次交换的位置
+                        lastExchange = j;
+                    }
+                }
+                sortBorder = lastExchange;
+                if (!flag) break;    // 没有数据交换，提前退出
+            }
+        }
+            public static void main(final String[] args) throws Exception {
+                Random random = new Random();
+                Scanner sc=new Scanner(System.in);
+                System.out.println("请输入背包容量");
+                int s=sc.nextInt();
+                System.out.println("请输入物品数量");
+                int n=sc.nextInt();
+                System.out.println("请输入物品质量上限");
+                int max=sc.nextInt();
+                int min=1;
+                int[] arr = new int[n];
+                System.out.println("随机产生的"+n+"个物品的重量如下：");
+                for (int i=0;i<n;i++) {
+                    arr[i]=random.nextInt(max)%(max-min+1) + min;
+                    System.out.print(" "+arr[i]);
+                }
+                bubbleSort2(arr,n);
+                int[] temp=new int[n];
+                int j=0;
+                for (int i=n-1;i>-1;i-- ) {
+                    temp[j]=arr[i];
+                    j++;
+                }
+                arr=temp;
+                System.out.println();
+                System.out.println("排序后");
+                for (int a:arr
+                     ) {
+                    System.out.print(" "+a);
+                }
+                System.out.println();
+    
+    /*测试数据
+                int s=15;
+                int[] arr = new int[5];
+                arr[0] = 4;
+                arr[1] = 11;
+                arr[2] = 10;
+                arr[3] = 2;
+                arr[4] = 3;
+    */
+                Bag k = new Bag();
+               boolean flag= k.knapsack(arr, 0, s, s);
+                if (!flag)
+                    System.out.println("无解");
+    
+    
+            }
+    }
+    
 
     ```
 > - ----
-[哈工大](http://www.hit.edu.cn/) ,一个你值得去好好学习的学校
+
 
  
+###题目 7 图的应用之三 
+>题目：全国交通咨询模拟 
+>>    * 【问题描述】： 
+     出于对不同目的的旅客对交通工具有不同的要求，例如，因公出差的旅客希望在旅途中的时间尽可
+     能短，出门旅游的游客则希望旅费尽可能省，而老年旅客则要求中转次数最少。编制一个全国城市间的
+     交通咨询程序，为旅客提供两种或三种最优决策的交通咨询。 
+     【基本要求】：略
+
+####解题思路
+1. 概要
+    1. 
+
+###题目 8 二叉树的应用 
+>   题目：哈夫曼编/译码器 
+>>    *【问题描述】： 
+   利用哈夫曼编码进行信息通信可以大大提高信道利用率，缩短信息传输时间，降低传输成本。但是，
+   这要求在发送端通过一个编码系统对待传数据预先编码，在接收端将传来的数据进行译码（复原）。对
+   于双工信道（即可以双向传输信息的信道），每端都需要一个完整的编/译码系统。试为这样的信息收
+   发站写一个哈夫曼编/译码系统。 
+>>  * 【基本要求】： 
+>>  1. I：初始化（Initialization）。从终端输入一个长度不超过 80 的字符串（全部为大写字母且
+   无空格）。统计字符串的长度 n、以及不同字符的个数和每种字符的权值，然后建立哈夫曼树。 
+>>  2. E：编码（Encoding）。利用已建好的哈夫曼树对正文字符串进行编码，并输出。 
+>>  3. D：译码（Decoding）。利用已建好的哈夫曼树与已经完成的编码进行译码，并输出。
+> - --
+####解题思路
+
+##尾页
+>[哈工大](http://www.hit.edu.cn/) ,一个你值得去好好学习的学校
