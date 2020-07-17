@@ -57,11 +57,18 @@ public class Linqueue implements Queue {
         int c= count;
         for (int i=0;i<c;i++){
 //            System.out.println(Qc.count);
-            Object b = getFront();
-            System.out.println(b);
-            delete();
+            Object b =delete();
+            System.out.print(" "+b);
         }
+    }
 
+    public void dAll() throws Exception {
+        int c = count;
+        for (int i = 0; i < c; i++) {
+//            System.out.println(Qc.count);
+            Object b = delete();
+//            System.out.print(" " + b);
+        }
     }
     public static void main(String[] args) throws Exception {
         Linqueue Qc=new Linqueue();

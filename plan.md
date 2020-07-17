@@ -321,7 +321,108 @@
         - 如果Qp中元素足够，则每从队列Qp中出队4个元素，从队列Qt中出队1元素，直到队列Q的长度为10；
         - 若队列Qp中元素不充分，则直接使用队列Qt中的元素补齐
 
+2. 详细设计
+    1. 设计Node类，Linqueue类实现链式队列的入队，出队，Ferry实现类构建4个队列，
+    并编写键盘输入队列的方法waitin（）和分车入队方法part（），最终通过条件和循
+    环语句的多层嵌套实现登船输出。
+    2. 总结：前期的程序框图的绘制，使得多层的嵌套实现时思路更加清晰。同时不同循环
+    间的缩进也使得嵌套更加清晰，便于检查。
+    3. 代码
+       - Ferry类
+    ```java
+   package P2;
+   
+   import java.util.Scanner;
+   
+   public class Ferry {//问题设为一次仅至多十辆车进入等待
+       Linqueue w =new Linqueue();
+       Linqueue Qp =new Linqueue();
+       Linqueue Qt= new Linqueue();
+       Linqueue Q= new Linqueue();
+       public int[] waitIn() throws Exception {//尝试能不能用
+           Scanner sc=new Scanner(System.in);
+           System.out.println("请输等待车队车牌号,并输入0结束");
+           int n = 1,i=0,j=0;
+           while(true){
+               n=sc.nextInt();
+               j++;
+               if (n==0)break;
+               w.append(n);
+               if (j==10)break;
+           }
+           int[] a = new int[w.count];
+           while(!w.isEmpty()){//这里犯了一个逻辑错误，w.isEmpty前面遗漏了！，导致语句没有进行
+               n= (int) w.getFront();
+   //          w.getFront输入进去时为整数，所以不能转换为String,再去转整数
+   //        int app =Integer.parseInt((String)w.getFront());
+   //            System.out.println(app);
+               w.delete();
+               a[i]=n;
+               i++;
+           }
+           return a;
+       }
+   //分车进入不同的队列
+       public void part(int[]array) throws Exception {
+           for ( int a:array){
+   //            System.out.println(a);
+                if (a<3000) Qp.append(a);
+                else Qt.append(a);
+                }
+       }
+       public static void main(String[] args) throws Exception {
+           Scanner sc=new Scanner(System.in);
+           Ferry ferry = new Ferry();
+           int[] a = ferry.waitIn();
+           ferry.part(a);
+           Linqueue Qp = ferry.Qp;
+           Linqueue Qt = ferry.Qt;
+           Linqueue Q = ferry.Q;
+           int c=Qp.count + Qt.count;
+           if ( c<10) {
+               System.out.println("等待车辆不足,仅为"+c);
+               System.out.println("是否添加等待车辆，y or n");
+               String yn=sc.next();
+               if (yn.equalsIgnoreCase("y"))
+                    a = ferry.waitIn();
+               ferry.part(a); }
+           if (Qp.isEmpty()){
+                   while (!Qt.isEmpty()){
+                       Q.append(Qt.delete());
+                   }
+               }
+           else if (Qt.isEmpty()){
+                   while (!Qp.isEmpty()){
+                       Q.append(Qp.delete());
+               }
+           }
+           else if (Qp.count > 3) {
+                   for (int j = 0; j < 4; j++) {
+                       Q.append(Qp.delete());
+                   }
+                   Q.append(Qt.delete());
+                   while (!Qp.isEmpty()){
+                       Q.append(Qp.delete());
+                   }
+                   while (!Qt.isEmpty()){
+                       Q.append(Qt.delete());
+                   }
+           }
+           else {
+                   while (!Qp.isEmpty()){
+                       Q.append(Qp.delete());
+                   }
+                   while (!Qt.isEmpty()){
+                       Q.append(Qt.delete());
+                   }
+   
+               }
+           Q.out_d_All();
+       }
+   }
+   
 
+    ```
 > - ----
 [哈工大](http://www.hit.edu.cn/) ,一个你值得去好好学习的学校
 

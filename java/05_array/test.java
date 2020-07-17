@@ -29,13 +29,13 @@ public class Array {
 
     //插入元素:头部插入，尾部插入
     public boolean insert(int index, int value){
-        //数组中无元素 
-//
-//        if (index == count && count == 0) {
-//            data[index] = value;
-//            ++count;
-//            return true;
-//        }
+        //数组中无元素
+
+        if (index == count && count == 0) {
+            data[index] = value;
+            ++count;
+            return true;
+        }
 
         // 数组空间已满
         if (count == n) {
