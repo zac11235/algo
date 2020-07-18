@@ -89,213 +89,25 @@
          * 链表中使用指针进行循环删除，直至链表中仅剩1个非头结点，跳出循环。
     3. 总结：结点的理解和指针的理解尤为重要，`Node c =new Node() `
     c为引用变量，代表的是地址，而非指向他的指针 
-    4. 代码
+    4. 代码   [约瑟夫问题](src/P1/),代码点击详见
         1. 循环单链表
-        ```java
-            
+        ```java          
        public class CircularLinkedList {
-       //    public void setHead(String s) {
-       //       head.value=s;
-       //    }
-           Node pre =null;
-           //java中循环单链表
-        class Node<T> {
-               public Node<T> getNext() {
-                   return next;
-               }
+
+        class Node<T> {}
        
-               //创建一个内部节点类
-               public Node<T> next = null;
-               public Object value = null;
-       
-               public Node() {
-       
-               }
-       
-               public Node(Object value) {
-                   this.value = value;
-               }
-           }
-       
-           public Node getHead() {
-               return head;
-           }
-       
-           public void setHead(Node head) {
-               this.head = head;
-           }
-       
-           private Node head ;//新建一个null的头结点
-       
-           public CircularLinkedList() {//初始化头结点信息
-               head = pre = new Node(null);
-               head.next = head;
-           }
-       
-           public void add(Object insertValue) {//在尾部添加节点
-               Node node = new Node(insertValue);
-               if (head.next == head) {
-                   head.next = node;
-                   node.next = head;
-               } else {
-                   Node temp = head;
-                   while (temp.next != head) {
-                       temp = temp.next;
-                   }
-                   temp.next = node;
-                   node.next = head;
-               }
-           }
-       
-           public void deleteNode(Object deleteValue) {//删除值为deleteValue的节点
-               Node temp = head;
-               while (temp.next != head) {
-                   if (temp.next.value.equals(deleteValue)) {
-                       temp.next = temp.next.next;
-                   } else {
-                       temp = temp.next;
-                   }
-               }
-           }
+           public void add(Object insertValue) {//在尾部添加节点    }       
+           public void deleteNode(Object deleteValue) {//删除值为deleteValue的节点}
        //删除当前节点，连接下一结点
            public void deleteNode() {//删除值为deleteValue的节点、
-               if (pre.next!=head)
-                   pre.next=pre.next.next;
-       //            pre= pre.next.next;pre并非是是指向pre的指针，而是pre的地址
-               else pre.next.next= pre.next.next.next;
-       
-           }
-       
-       
-           public Object getIndexValue(int index) {//查找位置为index的节点值
-               if (index < 0 || index >= getSize()) {
-                   return null;
-               } else {
-                   Node node = new Node();
-                   int count = 0;
-                   Node temp = head;
-                   while (temp.next != head) {
-                       if (count == index) {
-                           node.value = temp.next.value;
-                           break;
-                       }
-                       temp = temp.next;
-       
-                   }
-                   return node.value;
-               }
-           }
-       
-           public int getValue(Object value) {//查找值为value的节点
-               int count = 0;
-               Node temp = head;
-               while (temp.next != head) {
-                   if (temp.next.value.equals(value)) {
-                       return count;
-                   }
-                   count++;
-                   temp = temp.next;
-               }
-               return -1;
-           }
-       
-           public int getSize() {//获取循环单链表的长度
-               Node temp = head;
-               int size = 0;
-               while (temp.next != head) {
-                   size++;
-                   temp = temp.next;
-               }
-               return size;
-           }
-       
-           public boolean isContain(Object value) {//查找是否包含值为value的节点
-               Node temp = head;
-               while (temp.next != head) {
-                   if (temp.next.value.equals(value)) {
-                       return true;
-                   }
-                   temp = temp.next;
-               }
-               return false;
-           }
-       
-           public void disPlay() {//打印所有节点数据
-               Node temp = head;
-                   while (temp.next != head) {
-                       System.out.print(temp.next.value + "\t");
-                       temp = temp.next;
-               }
-               System.out.println();
-           }
-       
-           public static void main(String[] args) {
-               CircularLinkedList c=new CircularLinkedList();
-               c.add(10);
-               c.add(21);
-               c.add(12);
-               c.add(13);
-               c.add(40);
-               c.disPlay();
-       //		System.out.println(c.getSize());
-       //		System.out.println(c.getIndexValue(-1));
-       //		System.out.println(c.getValue(40));
-       //		c.deleteNode(10);
-       //		c.disPlay();
-       //		c.deleteNode(40);
-       //		c.disPlay();
-       //		c.deleteNode(12);
-       //		c.disPlay();
-               System.out.println(c.isContain(21));
-           }
-       }
-
+           } 
+           public Object getIndexValue(int index) {//查找位置为index的节点值}
+        }
         ```
-
+        
         2. 约瑟夫问题
         ```java
-        import java.util.Scanner;
-
-        public class joseph extends CircularLinkedList{
-
-
-
-
-
-        public static void main(String[] args) {
-
-        Scanner sc=new Scanner(System.in);
-        System.out.println("请输入总人数");
-        int n=sc.nextInt();
-        System.out.println("请输入数字");
-        int m=sc.nextInt();
-        joseph(n, m);
-        }
-        /**
-        * @param n 总人数
-         * @param m 数到几出列
-         */
-         public static void joseph(int n, int m) {
-
-        CircularLinkedList c = new CircularLinkedList();
-        for (int i = 1; i <= n; i++)
-            c.add("person-" + i);
-        CircularLinkedList.Node per = c.getHead();
-        while (c.getSize() > 1) {
-            for (int i = 0; i < m-1; i++) {
-                per = per.next;
-                //循环到head，指针多下移一步。
-                if (per==c.getHead())
-                    per = per.next;
-            }
-            c.pre =per;
-            c.deleteNode();
-        //  c.deleteNode(per.value);//删除当前值节点
-        //            per=c.curr;
-            c.disPlay();
-               }
-           }
-        }
+       
         ```
 ### 题目 2 堆栈和队列应用之一 
 > 题目：轮船渡口管理问题 
@@ -328,99 +140,8 @@
     2. 总结：前期的程序框图的绘制，使得多层的嵌套实现时思路更加清晰。同时不同循环
     间的缩进也使得嵌套更加清晰，便于检查。
     3. 代码
-       - Ferry类
-    ```java
-   package P2;
-   
-   import java.util.Scanner;
-   
-   public class Ferry {//问题设为一次仅至多十辆车进入等待
-       Linqueue w =new Linqueue();
-       Linqueue Qp =new Linqueue();
-       Linqueue Qt= new Linqueue();
-       Linqueue Q= new Linqueue();
-       public int[] waitIn() throws Exception {//尝试能不能用
-           Scanner sc=new Scanner(System.in);
-           System.out.println("请输等待车队车牌号,并输入0结束");
-           int n = 1,i=0,j=0;
-           while(true){
-               n=sc.nextInt();
-               j++;
-               if (n==0)break;
-               w.append(n);
-               if (j==10)break;
-           }
-           int[] a = new int[w.count];
-           while(!w.isEmpty()){//这里犯了一个逻辑错误，w.isEmpty前面遗漏了！，导致语句没有进行
-               n= (int) w.getFront();
-   //          w.getFront输入进去时为整数，所以不能转换为String,再去转整数
-   //        int app =Integer.parseInt((String)w.getFront());
-   //            System.out.println(app);
-               w.delete();
-               a[i]=n;
-               i++;
-           }
-           return a;
-       }
-   //分车进入不同的队列
-       public void part(int[]array) throws Exception {
-           for ( int a:array){
-   //            System.out.println(a);
-                if (a<3000) Qp.append(a);
-                else Qt.append(a);
-                }
-       }
-       public static void main(String[] args) throws Exception {
-           Scanner sc=new Scanner(System.in);
-           Ferry ferry = new Ferry();
-           int[] a = ferry.waitIn();
-           ferry.part(a);
-           Linqueue Qp = ferry.Qp;
-           Linqueue Qt = ferry.Qt;
-           Linqueue Q = ferry.Q;
-           int c=Qp.count + Qt.count;
-           if ( c<10) {
-               System.out.println("等待车辆不足,仅为"+c);
-               System.out.println("是否添加等待车辆，y or n");
-               String yn=sc.next();
-               if (yn.equalsIgnoreCase("y"))
-                    a = ferry.waitIn();
-               ferry.part(a); }
-           if (Qp.isEmpty()){
-                   while (!Qt.isEmpty()){
-                       Q.append(Qt.delete());
-                   }
-               }
-           else if (Qt.isEmpty()){
-                   while (!Qp.isEmpty()){
-                       Q.append(Qp.delete());
-               }
-           }
-           else if (Qp.count > 3) {
-                   for (int j = 0; j < 4; j++) {
-                       Q.append(Qp.delete());
-                   }
-                   Q.append(Qt.delete());
-                   while (!Qp.isEmpty()){
-                       Q.append(Qp.delete());
-                   }
-                   while (!Qt.isEmpty()){
-                       Q.append(Qt.delete());
-                   }
-           }
-           else {
-                   while (!Qp.isEmpty()){
-                       Q.append(Qp.delete());
-                   }
-                   while (!Qt.isEmpty()){
-                       Q.append(Qt.delete());
-                   }
-   
-               }
-           Q.out_d_All();
-       }
-   }
-    ```
+       - Ferry类,详细见[渡船问题](src/P2/)
+    
 ### 题目4  递归算法设计
 >题目：背包问题 
 >> * 【问题描述】： 
@@ -446,130 +167,15 @@
     3. 使用冒泡排序，排序物品重量，以完成有序递归
     4.总结：一般的整数数组无法实现自增，最后使用链式队列完成不确定长度解的输入输出
 3. 代码：
-    * Bag
+    * Bag 代码详见[背包问题](src/P3/)
     ```java
-    package P3;
-    
-    import P2.Linqueue;
-    import java.util.Random;
-    import java.util.Scanner;
-    
     public class Bag {
         Linqueue bag=new Linqueue();
         int num=0;
-        public boolean knapsack(int[] arr, int start, int left, int sum) throws Exception {
-            int t=0;
-            if (arr.length == 0&&num==0) {
-                return false;
-            }
-            if (arr.length == 0&&num>0)
-                return true;
-    
-            // start from the next item in original array
-            if (start == arr.length) {
-                bag.dAll();
-                int[] tempArr = new int[arr.length - 1];
-                for (int i = 0; i < tempArr.length; i++) {
-                    tempArr[i] = arr[i + 1];
-                }
-                return knapsack(tempArr, 0, sum, sum);
-            }
-            else if (arr[start] > left) {
-                return knapsack(arr, start + 1, left, sum);
-            }
-            else if (arr[start] == left) {
-                    // print the answer out
-                bag.append(arr[start]);
-                //可求不同首重物品的多解
-                num++;
-                System.out.println("第"+num+"解如下");
-                bag.out_d_All();
-                System.out.println();
-    
-                return knapsack(arr, arr.length, sum, sum);
-            }
-            else {
-                bag.append(arr[start]);
-                return knapsack(arr, start + 1, left - arr[start], sum);
-            }
-        }
-    
-        public static void bubbleSort2(int[] a, int n) {
-            if (n <= 1) return;
-    
-            // 最后一次交换的位置
-            int lastExchange = 0;
-            // 无序数据的边界,每次只需要比较到这里即可退出
-            int sortBorder = n - 1;
-            for (int i = 0; i < n; i++) {
-                // 提前退出标志位
-                boolean flag = false;
-                for (int j = 0; j < sortBorder; j++) {
-                    if (a[j] > a[j + 1]) {
-                        int tmp = a[j];
-                        a[j] = a[j + 1];
-                        a[j + 1] = tmp;
-                        // 此次冒泡有数据交换
-                        flag = true;
-                        // 更新最后一次交换的位置
-                        lastExchange = j;
-                    }
-                }
-                sortBorder = lastExchange;
-                if (!flag) break;    // 没有数据交换，提前退出
-            }
-        }
-            public static void main(final String[] args) throws Exception {
-                Random random = new Random();
-                Scanner sc=new Scanner(System.in);
-                System.out.println("请输入背包容量");
-                int s=sc.nextInt();
-                System.out.println("请输入物品数量");
-                int n=sc.nextInt();
-                System.out.println("请输入物品质量上限");
-                int max=sc.nextInt();
-                int min=1;
-                int[] arr = new int[n];
-                System.out.println("随机产生的"+n+"个物品的重量如下：");
-                for (int i=0;i<n;i++) {
-                    arr[i]=random.nextInt(max)%(max-min+1) + min;
-                    System.out.print(" "+arr[i]);
-                }
-                bubbleSort2(arr,n);
-                int[] temp=new int[n];
-                int j=0;
-                for (int i=n-1;i>-1;i-- ) {
-                    temp[j]=arr[i];
-                    j++;
-                }
-                arr=temp;
-                System.out.println();
-                System.out.println("排序后");
-                for (int a:arr
-                     ) {
-                    System.out.print(" "+a);
-                }
-                System.out.println();
-    
-    /*测试数据
-                int s=15;
-                int[] arr = new int[5];
-                arr[0] = 4;
-                arr[1] = 11;
-                arr[2] = 10;
-                arr[3] = 2;
-                arr[4] = 3;
-    */
-                Bag k = new Bag();
-               boolean flag= k.knapsack(arr, 0, s, s);
-                if (!flag)
-                    System.out.println("无解");
-    
-    
-            }
-    }
-    
+        public boolean knapsack(int[] arr, int start, int left, int sum) throws Exception {}   
+        public static void bubbleSort2(int[] a, int n) {}
 
+}
     ```
 > - ----
 
@@ -612,6 +218,27 @@
 3. 代码 略
     - 详细可见[代码](src/p8/)
     
-    
+### 题目 9 Hash 表问题 
+>   题目：Hash 表问题 
+>>   【问题描述】： 
+   假设有一个 100*100 的稀疏矩阵，其中 1%的元素为非零元素，现要求对其非零元素进行散列存储，
+   使之能够按元素的行、列值存取元素（即元素的行、列值联合一起作为元素的关键字），试采用除留余
+   数法构造散列函数和线性探查法处理冲突，分别设计出建立散列表和查找散列表的算法。 
+>>  * 【实现提示】： 
+   ①由题意可知，整个稀疏矩阵中非零元素的个数为 100 个。为了散列存储这 100 个非零元素，需要
+   使用一个称为散列表的一维数组，该数组中元素的类型为： 
+    Struct DataType{ 
+    int row; //存储非零元素行下标 
+    int col; //存储非零元素列下标 
+    float val; //存储非零元素值 
+    } 
+    ②假定用 H[m]表示这个散列表，其中 m 为散列表的长度，若取装载因子为 0.8 左右，则令 M=127 为 宜(127 为质数)； 
+    ③按照题目要求，需根据稀疏矩阵非零元素的行下标和列下标存取散列表中的元素，所以每个元素
+   的行下标和列下标共同组成元素的关键字。假定用 x 表示一个非零元素，按除留余数法构造散列函数，
+   并考虑尽量让得到的散列地址均匀分布，可以采用如下的散列函数： 
+   Hash(x)=(13*x.row+17*x.col) % m
+>* **
+
 ## 尾页
->[哈工大](http://www.hit.edu.cn/) ,一个你值得去好好学习的学校
+>- [zac1123](https://gitee.com/zac11235),欢迎更多的交流与学习
+>- [哈工大](http://www.hit.edu.cn/) ,一个你值得去好好学习的学校
