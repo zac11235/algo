@@ -1,16 +1,26 @@
 package P3;
 
+import java.util.Scanner;
+
 public class test {
     public static void main(final String... args) {
-        int[] arr = new int[5];
-        arr[0] = 11;
-        arr[1] = 30;
-        arr[2] = 1;
-        arr[3] = 1;
-        arr[4] = 3;
-        test k = new test();
-        boolean flag=k.knapsack(arr, 0, 16, 16);
-        System.out.println(flag);
+//        int[] arr = new int[5];
+//        arr[0] = 11;
+//        arr[1] = 30;
+//        arr[2] = 1;
+//        arr[3] = 1;
+//        arr[4] = 3;
+//        test k = new test();
+//        boolean flag=k.knapsack(arr, 0, 16, 16);
+//        System.out.println(flag);
+        Scanner sc=new Scanner(System.in);
+
+        String n = "";
+
+        for (int i=0;i<26;i++){
+           n=n+"\'"+sc.next()+"\'"+",";
+        }
+        System.out.println(n);
     }
 
     /**
